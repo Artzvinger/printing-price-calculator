@@ -1,3 +1,15 @@
+
+![HTML5](https://img.shields.io/badge/HTML5-orange?logo=html5)
+![CSS3](https://img.shields.io/badge/CSS3-blue?logo=css3)
+![JavaScript](https://img.shields.io/badge/JavaScript-yellow?logo=javascript)
+![Google Apps Script](https://img.shields.io/badge/Google%20Apps%20Script-black?logo=google)
+![Google Sheets](https://img.shields.io/badge/Google%20Sheets-green?logo=googlesheets)
+
+
+
+
+
+
 Typography Calculator with Google Sheets Integration
 
 Копия таблицы с интегрированным расчетом https://docs.google.com/spreadsheets/d/1saDkcLveXOZj-cxM80uwQ6ukp1aTi5wmMLis46mkqro/edit?gid=892978193#gid=892978193
