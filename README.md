@@ -1,6 +1,6 @@
-# 🧮 Typography Calculator with Google Sheets Integration
+Typography Calculator with Google Sheets Integration
 
-### 🇷🇺 Русская версия
+Русская версия
 
 Веб-приложение для расчёта стоимости типографических заказов.  
 Интерфейс выполнен на **HTML, CSS и JavaScript**, серверная часть реализована на **Google Apps Script** с прямой интеграцией в **Google Sheets**.  
@@ -16,7 +16,7 @@
 
 ---
 
-### 🇬🇧 English version
+English version
 
 A web app for calculating printing order costs.  
 Frontend built with **HTML, CSS, and JavaScript**, backend powered by **Google Apps Script** integrated directly with **Google Sheets**.  
