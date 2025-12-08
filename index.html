@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Калькулятор типографии</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="shortcut icon" href="icon.png" type="image/x-icon" />
+</head>
+<body>
+  <nav class="navigation">
+    <button class="nav-btn active" data-page="customer">Заказчик</button>
+    <button class="nav-btn" data-page="order">Заказ</button>
+    <button class="nav-btn" data-page="materials">Материалы</button>
+    <button class="nav-btn" data-page="operations">Операции</button>
+    <button class="nav-btn" data-page="results">Результаты</button>
+  </nav>
+
+  <div class="moneysection">
+    <h2>Курсы валют</h2>
+    <div class="currency-rates">
+      <label>Курс USD ($):
+        <input type="number" id="usd-rate" value="90" step="0.01" />
+      </label>
+      <label>Курс EUR (€):
+        <input type="number" id="eur-rate" value="100" step="0.01" />
+      </label>
+      <button id="update-rates-btn" type="button">🔄 Обновить курсы</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>Калькулятор типографии</h1>
+    </header>
+
+    <div class="page active" id="welcome-page">
+      <div class="welcome-section">
+        <h1>Добро пожаловать в калькулятор типографии!</h1>
+        <p>Рассчитайте стоимость вашего тиража быстро и точно</p>
+
+        <div class="welcome-features">
+          <div class="feature">
+            <span>📊</span>
+            <h3>Точный расчет</h3>
+            <p>Автоматический расчет НДС и всех затрат</p>
+          </div>
+          <div class="feature">
+            <span>💾</span>
+            <h3>Сохранение данных</h3>
+            <p>Все данные сохраняются автоматически</p>
+          </div>
+          <div class="feature">
+            <span>🔄</span>
+            <h3>Актуальные курсы</h3>
+            <p>Автоматическое обновление курсов валют</p>
+          </div>
+          <div class="feature">
+            <span>🙋‍♂️</span>
+            <h3>Информация о заказчике</h3>
+            <p>Полное сохранение информации о заказчике</p>
+          </div>
+        </div>
+
+        <button class="start-btn" data-page="customer">Приступить к расчету</button>
+      </div>
+    </div>
+
+    <div class="page" id="customer-page">
+      <div class="section">
+        <h2>Информация о заказчике</h2>
+        <div class="customer-info">
+          <input type="text" id="company-name" placeholder="Наименование компании" />
+          <input type="text" id="company-address" placeholder="Адрес" />
+          <input type="text" id="company-contacts" placeholder="Контакты" />
+        </div>
+      </div>
+      <div class="page-navigation">
+        <button class="next-btn" data-next="order" style="margin-left: auto;">Далее →</button>
+      </div>
+    </div>
+
+    <div class="page" id="order-page">
+      <div class="section">
+        <h2>Информация о заказе</h2>
+        <div class="order-info">
+          <input type="text" id="product-name" placeholder="Наименование изделия" />
+          <input type="number" id="quantity" placeholder="Количество изделий" min="1" />
+          <input type="number" id="per-sheet" placeholder="Количество на листе" step="0.1" min="0.1" />
+          <input type="text" id="notes" placeholder="Примечания" />
+        </div>
+      </div>
+      <div class="page-navigation">
+        <button class="prev-btn" data-prev="customer">← Назад</button>
+        <button class="next-btn" data-next="materials">Далее →</button>
+      </div>
+    </div>
+
+    <div class="page" id="materials-page">
+      <div class="section">
+        <h2>Выбор материала</h2>
+        <div class="material-cost">
+          <select id="material-type-select">
+            <option value="paper">Бумага</option>
+            <option value="cardboard">Картон</option>
+          </select>
+          <input type="number" id="material-price" placeholder="Цена за кг" value="120" step="0.01" />
+          <select id="material-currency">
+            <option value="₽">₽</option>
+            <option value="$">$</option>
+            <option value="€">€</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Информация о материале</h2>
+        <div class="material-info">
+          <div class="material-row">
+            <span class="material-label">Масса квадратного метра:</span>
+            <input type="number" id="grams-per-m2" placeholder="г/м²" value="220" />
+          </div>
+
+          <label for="format-size">Формат бумаги:</label>
+          <select id="format-size">
+            <option value="А2">А2</option>
+            <option value="А3" selected>А3</option>
+            <option value="А4">А4</option>
+          </select>
+
+          <div class="format-group">
+            <h3>Форматы материала</h3>
+
+            <div class="format-compact">
+              <span>Формат печати:</span>
+              <input type="number" id="purchase-width" value="600" />
+              ×
+              <input type="number" id="purchase-height" value="420" /> мм
+            </div>
+
+            <div class="format-compact">
+              <span>Закупочный формат:</span>
+              <input type="number" id="print-width" value="297" />
+              ×
+              <input type="number" id="print-height" value="420" /> мм
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-navigation">
+        <button class="prev-btn" data-prev="order">← Назад</button>
+        <button class="next-btn" data-next="operations">Далее →</button>
+      </div>
+    </div>
+
+    <div class="page" id="operations-page">
+      <div class="section">
+        <h2>Калькуляция тиража</h2>
+        <div class="operations">
+          
+          <div class="operation-item">
+            <label for="material-type">Материал:</label>
+            <select id="material-type">
+              <option value="нет" selected>нет</option>
+              <option value="Бумага_мелованная 150 г/м²">Бумага_мелованная 150 г/м²</option>
+              <option value="Картон 220 г/м²">Картон 220 г/м²</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="cutting-format">Подрезка:</label>
+            <select id="cutting-format">
+              <option value="нет" selected>нет</option>
+              <option value="на формат А2">На формат А2</option>
+              <option value="на формат А3">На формат А3</option>
+              <option value="на формат А4">На формат А4</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="print-type">Печать:</label>
+            <select id="print-type">
+              <option value="нет" selected>нет</option>
+              <option value="1+0">1+0</option>
+              <option value="2+0">2+0</option>
+              <option value="3+0">3+0</option>
+              <option value="4+0">4+0</option>
+              <option value="5+0">5+0</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="lamination">Ламинация:</label>
+            <select id="lamination">
+              <option value="нет" selected>нет</option>
+              <option value="Глянцевая 1+0">Глянцевая 1+0</option>
+              <option value="Глянцевая 1+1">Глянцевая 1+1</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="uv-varnish">УФ-лак:</label>
+            <select id="uv-varnish">
+              <option value="нет" selected>нет</option>
+              <option value="Глянцевая 1+0">Глянцевая 1+0</option>
+              <option value="Глянцевая 1+1">Глянцевая 1+1</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="cutting">Резка:</label>
+            <select id="cutting">
+              <option value="нет" selected>нет</option>
+              <option value="на формат А3">На формат А3</option>
+              <option value="на формат А4">На формат А4</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="embossing1">Тиснение (1):</label>
+            <select id="embossing1">
+              <option value="нет" selected>нет</option>
+              <option value="фольгой 1 клише">Фольгой 1 клише</option>
+              <option value="фольгой 2 клише">Фольгой 2 клише</option>
+              <option value="конгревное 1 клише">Конгревное 1 клише</option>
+              <option value="конгревное 2 клише">Конгревное 2 клише</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="embossing2">Тиснение (2):</label>
+            <select id="embossing2">
+              <option value="нет" selected>нет</option>
+              <option value="Фольгой 1 клише">Фольгой 1 клише</option>
+              <option value="Фольгой 2 клише">Фольгой 2 клише</option>
+              <option value="Конгревное 1 клише">Конгревное 1 клише</option>
+              <option value="Конгревное 2 клише">Конгревное 2 клише</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="die-cutting">Вырубка:</label>
+            <select id="die-cutting">
+              <option value="нет" selected>нет</option>
+              <option value="1 изделие">1 изделие</option>
+              <option value="2 изделие">2 изделие</option>
+              <option value="3 изделие">3 изделие</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="gluing">Склейка:</label>
+            <select id="gluing">
+              <option value="нет" selected>нет</option>
+              <option value="1 точка">1 точка</option>
+              <option value="2 точки">2 точки</option>
+            </select>
+          </div>
+
+          <div class="operation-item">
+            <label for="binding">Брошюровка:</label>
+            <select id="binding">
+              <option value="нет" selected>нет</option>
+              <option value="на клей">на клей</option>
+              <option value="на нитку">на нитку</option>
+              <option value="на пружинку">на пружинку</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Дата отгрузки</h2>
+        <input type="date" id="shipping-date" />
+      </div>
+
+      <div class="page-navigation">
+        <button class="prev-btn" data-prev="materials">← Назад</button>
+        <button class="next-btn" data-next="results">Рассчитать →</button>
+      </div>
+    </div>
+
+    <div class="page" id="results-page">
+      <div class="section results">
+        <h2>Результаты расчета</h2>
+        <div class="result-item">
+          <span>Итого:</span>
+          <span id="total-result">0.00 ₽</span>
+        </div>
+        <div class="result-item">
+          <span>НДС (20%):</span>
+          <span id="vat-result">0.00 ₽</span>
+        </div>
+        <div class="result-item total">
+          <span>Всего к оплате:</span>
+          <span id="final-result">0.00 ₽</span>
+        </div>
+      </div>
+
+      <div class="page-navigation">
+        <button class="prev-btn" data-prev="operations">← Назад</button>
+        <button id="clear-btn">Очистить данные</button>
+        <button id="new-calculation-btn">Новый расчет</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
