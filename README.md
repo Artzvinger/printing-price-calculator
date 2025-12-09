@@ -14,7 +14,7 @@ Typography Calculator with Google Sheets Integration
 
 🔹 Адаптивный современный интерфейс  
 🔹 Сохранение данных (LocalStorage)  
-🔹 Работа без внешнего сервера — только Google API  
+🔹 Работа без внешнего сервера - только Google API  
 🔹 Интеграция с Excel-подобными вычислениями в реальном времени  
 
 **Технологии:**  
@@ -26,7 +26,7 @@ The app calculates sheet usage, costs, VAT, and final totals, updating currency 
 
 🔹 Responsive modern interface  
 🔹 Local data persistence  
-🔹 No external backend — pure Google integration  
+🔹 No external backend - pure Google integration  
 🔹 Real-time Excel-like calculations  
 
 **Tech stack:**  
