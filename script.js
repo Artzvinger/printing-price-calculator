@@ -1,8 +1,7 @@
 class ExcelCalculator {
 	constructor() {
 		this.scriptUrl =
-			'https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbwKGCC9vAClV8eI-ubL0kyiYPnuq5QfEE0YXlA_g0yAedFelv63pXdG_mUqRWyXOgrL/exec'
-
+			'https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbxvR3wQ5JH4M9fy7jz9yz9O5ZIpn3WDP7-CgSfxzW41iFZ_BXoBctj_O5YemJM8tx4t/exec'
 		this.currentPage = 'customer'
 		this.init()
 	}
@@ -13,6 +12,9 @@ class ExcelCalculator {
 		this.loadData()
 	}
 
+	// ------------------------------
+	// Навигация
+	// ------------------------------
 	setupNavigation() {
 		document
 			.querySelectorAll('.nav-btn')
@@ -57,12 +59,13 @@ class ExcelCalculator {
 		if (activeBtn) activeBtn.classList.add('active')
 
 		this.currentPage = pageName
-		if (pageName === 'results') this.calculateWithExcel()
 	}
 
+	// ------------------------------
+	// Сбор данных формы
+	// ------------------------------
 	collectExcelData() {
 		const get = id => document.getElementById(id)?.value || ''
-
 		return {
 			companyName: get('company-name'),
 			companyAddress: get('company-address'),
@@ -103,9 +106,32 @@ class ExcelCalculator {
 		}
 	}
 
+	// ------------------------------
+	// Расчёт с Excel
+	// ------------------------------
 	async calculateWithExcel() {
 		const calculateBtn = document.querySelector('[data-next="results"]')
 		if (!calculateBtn) return
+
+		// Проверка форматов
+		const pw = parseFloat(document.getElementById('print-width')?.value || 0)
+		const ph = parseFloat(document.getElementById('print-height')?.value || 0)
+		const purW = parseFloat(
+			document.getElementById('purchase-width')?.value || 0
+		)
+		const purH = parseFloat(
+			document.getElementById('purchase-height')?.value || 0
+		)
+
+		if (pw > purW || ph > purH) {
+			this.showAlert(
+				'❌ Ошибка формата!',
+				`Формат печати не может быть больше формата закупочного.<br><br>
+				📏 Печать: <b>${pw}×${ph} мм</b><br>
+				📐 Закупка: <b>${purW}×${purH} мм</b>`
+			)
+			return // 🚫 Полная остановка
+		}
 
 		const originalText = calculateBtn.textContent
 		calculateBtn.textContent = '⏳ Расчет выполняется...'
@@ -113,78 +139,72 @@ class ExcelCalculator {
 
 		try {
 			const excelData = this.collectExcelData()
-			console.log('📤 Отправляем данные в Excel:', excelData)
-
 			const response = await fetch(this.scriptUrl, {
 				method: 'POST',
 				body: JSON.stringify(excelData),
 			})
 
 			const text = await response.text()
-			console.log('🔍 Ответ сервера (сырой):', text)
-
 			let result
 			try {
 				result = JSON.parse(text)
-			} catch (err) {
-				console.warn('⚠️ Не удалось разобрать JSON:', err)
-				alert('Ответ от сервера не JSON, смотри консоль.')
+			} catch {
+				this.showAlert('Ошибка', 'Сервер вернул некорректный JSON')
 				return
 			}
 
-			console.log('📊 Результаты из Excel:', result)
-
 			if (result.success) {
-
 				const clean = val => {
-					if (val === undefined || val === null || val === '' || val === '#VALUE!') return 0
+					if (!val || val === '#VALUE!') return 0
 					const num = parseFloat(String(val).replace(',', '.'))
 					return isNaN(num) ? 0 : num
 				}
 
-				const sheetsKg = clean(result.sheetsKg)
-				const circulation = clean(result.circulation)
-				const total = clean(result.total)
-				const vat = clean(result.vat)
-				const final = clean(result.final)
-
-				document.getElementById('sheets-kg').value = sheetsKg
-				document.getElementById('circulation').value = circulation
-
-				this.showResults(total, vat, final)
-
-				this.showMessage(
-					total === 0
-						? '⚠️ Нет данных для расчета'
-						: '✅ Расчет выполнен успешно',
-					total === 0 ? 'warning' : 'success'
+				this.setValueSafe('sheets-kg', clean(result.sheetsKg))
+				this.setValueSafe('circulation', clean(result.circulation))
+				this.showResults(
+					clean(result.total),
+					clean(result.vat),
+					clean(result.final)
 				)
+
+				this.showMessage('✅ Расчет выполнен успешно', 'success')
+				this.showPage('results') // 🟢 Переход на результаты только при успехе
 			} else {
-				throw new Error(result.error || 'Ошибка при расчёте')
+				this.showAlert('Ошибка', result.error || 'Ошибка при расчете')
 			}
-		} catch (error) {
-			console.error('❌ Ошибка:', error)
-			this.showMessage(`Ошибка: ${error.message}`, 'error')
+		} catch (err) {
+			this.showAlert('Ошибка', err.message)
 		} finally {
 			calculateBtn.textContent = originalText
 			calculateBtn.disabled = false
 		}
 	}
 
-	showResults(total, vat, final) {
-		const format = n =>
-			isNaN(n) || n === undefined ? '—' : `${parseFloat(n).toFixed(2)} ₽`
+	// ------------------------------
+	// Помощники
+	// ------------------------------
+	setValueSafe(id, value) {
+		const el = document.getElementById(id)
+		if (!el) return
+		if ('value' in el) el.value = value
+		else el.textContent = value
+	}
 
+	showResults(total, vat, final) {
+		const format = n => (isNaN(n) ? '—' : `${parseFloat(n).toFixed(2)} ₽`)
 		const set = (id, val) => {
 			const el = document.getElementById(id)
 			if (el) el.textContent = format(val)
 		}
-
 		set('total-result', total)
 		set('vat-result', vat)
 		set('final-result', final)
 	}
 
+	// ------------------------------
+	// Уведомления
+	// ------------------------------
 	showMessage(text, type = 'info') {
 		let box = document.getElementById('message-box')
 		if (!box) {
@@ -199,84 +219,111 @@ class ExcelCalculator {
 			box.style.fontSize = '16px'
 			box.style.fontWeight = '500'
 			box.style.zIndex = '9999'
-			box.style.transition = 'opacity 0.3s ease'
+			box.style.transition = 'opacity 0.3s'
 			document.body.appendChild(box)
 		}
-
 		const colors = {
 			success: '#28a745',
 			error: '#dc3545',
 			warning: '#ffc107',
 			info: '#007bff',
 		}
-
 		box.textContent = text
 		box.style.background = colors[type] || colors.info
 		box.style.opacity = '1'
 		setTimeout(() => (box.style.opacity = '0'), 4000)
 	}
 
+	showAlert(title, message) {
+		let alertBox = document.getElementById('center-alert')
+		if (!alertBox) {
+			alertBox = document.createElement('div')
+			alertBox.id = 'center-alert'
+			alertBox.style.position = 'fixed'
+			alertBox.style.top = '50%'
+			alertBox.style.left = '50%'
+			alertBox.style.transform = 'translate(-50%, -50%) scale(0.9)'
+			alertBox.style.background = 'white'
+			alertBox.style.borderRadius = '15px'
+			alertBox.style.boxShadow = '0 8px 30px rgba(0,0,0,0.25)'
+			alertBox.style.padding = '30px 40px'
+			alertBox.style.textAlign = 'center'
+			alertBox.style.zIndex = '99999'
+			alertBox.style.fontFamily = 'Inter, sans-serif'
+			alertBox.style.transition = 'all 0.3s ease'
+			alertBox.style.opacity = '0'
+
+			const titleEl = document.createElement('h3')
+			titleEl.id = 'alert-title'
+			titleEl.style.marginBottom = '10px'
+			titleEl.style.fontSize = '20px'
+			titleEl.style.color = '#dc3545'
+			titleEl.style.fontWeight = '700'
+
+			const messageEl = document.createElement('div')
+			messageEl.id = 'alert-message'
+			messageEl.style.fontSize = '16px'
+			messageEl.style.color = '#2d3748'
+
+			const closeBtn = document.createElement('button')
+			closeBtn.textContent = 'ОК'
+			closeBtn.style.marginTop = '20px'
+			closeBtn.style.padding = '10px 25px'
+			closeBtn.style.border = 'none'
+			closeBtn.style.borderRadius = '8px'
+			closeBtn.style.background = '#dc3545'
+			closeBtn.style.color = 'white'
+			closeBtn.style.fontWeight = '600'
+			closeBtn.style.cursor = 'pointer'
+			closeBtn.addEventListener('click', () => {
+				alertBox.style.opacity = '0'
+				alertBox.style.transform = 'translate(-50%, -50%) scale(0.9)'
+				setTimeout(() => alertBox.remove(), 300)
+			})
+
+			alertBox.append(titleEl, messageEl, closeBtn)
+			document.body.appendChild(alertBox)
+		}
+		document.getElementById('alert-title').innerHTML = title
+		document.getElementById('alert-message').innerHTML = message
+		setTimeout(() => {
+			alertBox.style.opacity = '1'
+			alertBox.style.transform = 'translate(-50%, -50%) scale(1)'
+		}, 10)
+	}
+
+	// ------------------------------
+	// События
+	// ------------------------------
 	setupEvents() {
-		const calculateBtn = document.querySelector('[data-next="results"]')
-		if (calculateBtn)
-			calculateBtn.addEventListener('click', e => {
+		const calc = document.querySelector('[data-next="results"]')
+		if (calc)
+			calc.addEventListener('click', e => {
 				e.preventDefault()
 				this.calculateWithExcel()
 			})
 
-		const updateRatesBtn = document.getElementById('update-rates-btn')
-		if (updateRatesBtn)
-			updateRatesBtn.addEventListener('click', () => this.updateCurrencyRates())
+		const updateRates = document.getElementById('update-rates-btn')
+		if (updateRates)
+			updateRates.addEventListener('click', () => this.updateCurrencyRates())
 
-		const clearBtn = document.getElementById('clear-btn')
-		if (clearBtn) clearBtn.addEventListener('click', () => this.clearData())
-
-		const newCalcBtn = document.getElementById('new-calculation-btn')
-		if (newCalcBtn) newCalcBtn.addEventListener('click', () => this.clearData())
+		const clear = document.getElementById('clear-btn')
+		if (clear) clear.addEventListener('click', () => this.clearData())
 	}
 
-	async updateCurrencyRates() {
-		const button = document.getElementById('update-rates-btn')
-		if (!button) return
-
-		const originalText = button.textContent
-		button.textContent = '⏳ Загружаем...'
-		button.disabled = true
-
-		try {
-			const r = await fetch('https://www.cbr-xml-daily.ru/daily_json.js')
-			if (!r.ok) throw new Error('Ошибка загрузки ЦБ РФ')
-			const data = await r.json()
-
-			document.getElementById('usd-rate').value =
-				data.Valute.USD.Value.toFixed(2)
-			document.getElementById('eur-rate').value =
-				data.Valute.EUR.Value.toFixed(2)
-
-			this.showMessage(
-				`💱 Курсы обновлены: USD = ${data.Valute.USD.Value.toFixed(
-					2
-				)} ₽ | EUR = ${data.Valute.EUR.Value.toFixed(2)} ₽`,
-				'success'
-			)
-		} catch (e) {
-			console.error('Ошибка:', e)
-			this.showMessage('❌ Не удалось обновить курсы валют', 'error')
-		} finally {
-			button.textContent = originalText
-			button.disabled = false
-		}
-	}
-
+	// ------------------------------
+	// Сохранение/загрузка
+	// ------------------------------
 	saveData() {
 		try {
-			const data = this.collectExcelData()
-			localStorage.setItem('calculator-excel-data', JSON.stringify(data))
+			localStorage.setItem(
+				'calculator-excel-data',
+				JSON.stringify(this.collectExcelData())
+			)
 		} catch (e) {
-			console.error('Ошибка сохранения:', e)
+			console.error(e)
 		}
 	}
-
 	loadData() {
 		try {
 			const saved = localStorage.getItem('calculator-excel-data')
@@ -286,21 +333,19 @@ class ExcelCalculator {
 				const el = document.getElementById(
 					key.replace(/[A-Z]/g, m => '-' + m.toLowerCase())
 				)
-				if (el) {
-					el.value = data[key]
-				}
+				if (el) el.value = data[key]
 			}
 		} catch (e) {
-			console.error('Ошибка загрузки данных:', e)
+			console.error(e)
 		}
 	}
-
 	clearData() {
 		if (!confirm('Очистить все данные?')) return
-		document.querySelectorAll('input, textarea, select').forEach(el => {
-			if (el.type === 'checkbox') el.checked = false
-			else el.value = ''
-		})
+		document
+			.querySelectorAll('input, textarea, select')
+			.forEach(el =>
+				el.type === 'checkbox' ? (el.checked = false) : (el.value = '')
+			)
 		this.showResults(0, 0, 0)
 		localStorage.removeItem('calculator-excel-data')
 		this.showPage('customer')

@@ -31,7 +31,7 @@
 
   <div class="container">
     <header>
-      <h1>Калькулятор типографии</h1>
+      <h1>Калькулятор расчета заказа</h1>
     </header>
 
     <div class="page active" id="welcome-page">
@@ -52,7 +52,7 @@
           </div>
           <div class="feature">
             <span>🔄</span>
-            <h3>Актуальные курсы</h3>
+            <h3>Актуальные курсы валют</h3>
             <p>Автоматическое обновление курсов валют</p>
           </div>
           <div class="feature">
@@ -116,10 +116,6 @@
       <div class="section">
         <h2>Информация о материале</h2>
         <div class="material-info">
-          <div class="material-row">
-            <span class="material-label">Масса квадратного метра:</span>
-            <input type="number" id="grams-per-m2" placeholder="г/м²" value="220" />
-          </div>
 
           <label for="format-size">Формат бумаги:</label>
           <select id="format-size">
@@ -130,19 +126,17 @@
 
           <div class="format-group">
             <h3>Форматы материала</h3>
-
-            <div class="format-compact">
-              <span>Формат печати:</span>
-              <input type="number" id="purchase-width" value="600" />
-              ×
-              <input type="number" id="purchase-height" value="420" /> мм
-            </div>
-
             <div class="format-compact">
               <span>Закупочный формат:</span>
-              <input type="number" id="print-width" value="297" />
+              <input type="number" id="print-width" value="600" />
               ×
               <input type="number" id="print-height" value="420" /> мм
+            </div>
+            <div class="format-compact">
+              <span>Формат печати:</span>
+              <input type="number" id="purchase-width" value="297" />
+              ×
+              <input type="number" id="purchase-height" value="420" /> мм
             </div>
           </div>
         </div>
