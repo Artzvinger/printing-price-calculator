@@ -1,7 +1,7 @@
 class ExcelCalculator {
 	constructor() {
 		this.scriptUrl =
-			'https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbxvR3wQ5JH4M9fy7jz9yz9O5ZIpn3WDP7-CgSfxzW41iFZ_BXoBctj_O5YemJM8tx4t/exec'
+			'https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbzYAbY4S0quoK-lLgGiIjlfmzDwsnTVjuK8_1qlkycGvzk5BdvmELmFPS7QDWheWTSo/exec'
 		this.currentPage = 'customer'
 		this.init()
 	}
@@ -356,3 +356,4 @@ document.addEventListener('DOMContentLoaded', () => {
 	window.calculator = new ExcelCalculator()
 	console.log('✅ Калькулятор с Excel запущен!')
 })
+
