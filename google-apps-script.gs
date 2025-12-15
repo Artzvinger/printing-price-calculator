@@ -6,7 +6,7 @@ function doPost(e) {
 
     const data = JSON.parse(e.postData.contents);
 
-    const ss = SpreadsheetApp.openById('1gPnqZqB6Y2HP45MvujgBBvbgB6uabQ0gzZb7SlYLgOU');
+    const ss = SpreadsheetApp.openById('1dHH91iMv4_z-udSGFheLkQlzAXsQL7V79sLayiK3_VU');
     const sheet = ss.getSheetByName('Лист1');
 
     sheet.getRange('A8').setValue(data.companyName || '');
@@ -135,7 +135,7 @@ function normalizeOperationValue(cell, value) {
     case 'B35': // Брошюровка
       if (v.includes('на клей')) return 'на клей';
       if (v.includes('на нитку')) return 'на нитку';
-      if (v.includes('на пружинку')) return 'на пружинку';
+      if (v.includes('на пружину')) return 'на пружину';
       return 'нет';
 
     default:
