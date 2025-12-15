@@ -12,7 +12,9 @@ class ExcelCalculator {
 		this.loadData()
 	}
 
-
+	// ------------------------------
+	// Навигация
+	// ------------------------------
 	setupNavigation() {
 		document
 			.querySelectorAll('.nav-btn')
@@ -59,6 +61,9 @@ class ExcelCalculator {
 		this.currentPage = pageName
 	}
 
+	// ------------------------------
+	// Сбор данных формы
+	// ------------------------------
 	collectExcelData() {
 		const get = id => document.getElementById(id)?.value || ''
 		return {
@@ -101,11 +106,14 @@ class ExcelCalculator {
 		}
 	}
 
-
+	// ------------------------------
+	// Расчёт с Excel
+	// ------------------------------
 	async calculateWithExcel() {
 		const calculateBtn = document.querySelector('[data-next="results"]')
 		if (!calculateBtn) return
 
+		// Проверка форматов
 		const pw = parseFloat(document.getElementById('print-width')?.value || 0)
 		const ph = parseFloat(document.getElementById('print-height')?.value || 0)
 		const purW = parseFloat(
@@ -122,7 +130,7 @@ class ExcelCalculator {
 				📏 Печать: <b>${pw}×${ph} мм</b><br>
 				📐 Закупка: <b>${purW}×${purH} мм</b>`
 			)
-			return
+			return // 🚫 Полная остановка
 		}
 
 		const originalText = calculateBtn.textContent
@@ -160,8 +168,8 @@ class ExcelCalculator {
 					clean(result.final)
 				)
 
-				this.showMessage(' Расчет выполнен успешно', 'success')
-				this.showPage('results')
+				this.showMessage('✅ Расчет выполнен успешно', 'success')
+				this.showPage('results') // 🟢 Переход на результаты только при успехе
 			} else {
 				this.showAlert('Ошибка', result.error || 'Ошибка при расчете')
 			}
@@ -173,6 +181,9 @@ class ExcelCalculator {
 		}
 	}
 
+	// ------------------------------
+	// Помощники
+	// ------------------------------
 	setValueSafe(id, value) {
 		const el = document.getElementById(id)
 		if (!el) return
@@ -191,6 +202,9 @@ class ExcelCalculator {
 		set('final-result', final)
 	}
 
+	// ------------------------------
+	// Уведомления
+	// ------------------------------
 	showMessage(text, type = 'info') {
 		let box = document.getElementById('message-box')
 		if (!box) {
@@ -278,6 +292,9 @@ class ExcelCalculator {
 		}, 10)
 	}
 
+	// ------------------------------
+	// События
+	// ------------------------------
 	setupEvents() {
 		const calc = document.querySelector('[data-next="results"]')
 		if (calc)
@@ -294,6 +311,9 @@ class ExcelCalculator {
 		if (clear) clear.addEventListener('click', () => this.clearData())
 	}
 
+	// ------------------------------
+	// Сохранение/загрузка
+	// ------------------------------
 	saveData() {
 		try {
 			localStorage.setItem(
@@ -334,6 +354,5 @@ class ExcelCalculator {
 
 document.addEventListener('DOMContentLoaded', () => {
 	window.calculator = new ExcelCalculator()
-	console.log('Калькулятор с Excel запущен!')
+	console.log('✅ Калькулятор с Excel запущен!')
 })
-
