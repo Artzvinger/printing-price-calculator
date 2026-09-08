@@ -44,6 +44,7 @@ const StepCustomer = ({
             </div>
 
             <div className="page-navigation">
+                <div></div>
                 <button
                     type="button"
                     className="next-btn"
