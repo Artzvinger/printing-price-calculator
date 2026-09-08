@@ -2,8 +2,8 @@
 
 Веб-приложение для мгновенного расчёта стоимости полиграфической продукции.  
 Интегрирован с **Google Sheets** через **Google Apps Script** — все формулы и цены хранятся и обновляются в таблице.
-[Копия интегрированной таблицы на которую приходят запросы:](https://docs.google.com/spreadsheets/d/1saDkcLveXOZj-cxM80uwQ6ukp1aTi5wmMLis46mkqro/edit?gid=892978193#gid=892978193)
 ---
+[Копия интегрированной таблицы на которую приходят запросы:](https://docs.google.com/spreadsheets/d/1saDkcLveXOZj-cxM80uwQ6ukp1aTi5wmMLis46mkqro/edit?gid=892978193#gid=892978193)
 
 ## 🚀 Демо
 
