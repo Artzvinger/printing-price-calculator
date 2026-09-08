@@ -1,179 +1,345 @@
-import React, { useState } from 'react';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { calculateOrder } from './api/googleSheetsApi';
-import StepCustomer from './components/Step/StepCustomer';
-import StepOrder from './components/Step/StepOrder';
-import StepMaterials from './components/Step/StepMaterials';
-import StepOperations from './components/Step/StepOperations';
-import StepResults from './components/Step/StepResults';
+import { useState } from 'react';
 import './styles/style.css';
 
-const App = () => {
-    const [step, setStep] = useState('customer');
-    const [formData, setFormData] = useLocalStorage('calculatorData', {
-        companyName: '',
-        companyAddress: '',
-        companyContacts: '',
-        productName: '',
-        quantity: '',
-        perSheet: '',
-        notes: '',
-        materialType: 'paper',
-        materialPrice: '',
-        materialCurrency: '₽',
-        formatSize: 'А3',
-        printWidth: '',
-        printHeight: '',
-        purchaseWidth: '',
-        purchaseHeight: '',
-        usdRate: '',
-        eurRate: '',
-        opCutting: '',
-        opPrinting: '',
-        opLamination: '',
-        opUV: '',
-        opCutting2: '',
-        opEmbossing1: '',
-        opEmbossing2: '',
-        opDieCutting: '',
-        opGluing: '',
-        opBinding: '',
-        shippingDate: '',
-    });
+import StepCustomer from './components/Step/StepCustomer';
+import StepMaterials from './components/Step/StepMaterials';
+import StepOperations from './components/Step/StepOperations';
+import StepOrder from './components/Step/StepOrder';
+import StepResults from './components/Step/StepResults';
 
-    const [results, setResults] = useState(null);
-    const [error, setError] = useState(null);
+import { calculateOrder } from './api/googleSheetsApi';
+
+const initialFormData = {
+    // Заказчик
+    companyName: '',
+    companyAddress: '',
+    companyContacts: '',
+
+    // Изделие
+    productName: '',
+    quantity: '',
+    perSheet: '',
+    notes: '',
+
+    // Материал
+    materialType: 'paper',
+    materialPrice: '',
+    materialCurrency: '₽',
+
+    // Формат
+    formatSize: 'А3',
+    printWidth: '',
+    printHeight: '',
+    purchaseWidth: '',
+    purchaseHeight: '',
+
+    // Курсы валют
+    usdRate: '',
+    eurRate: '',
+
+    // Операции
+    cuttingFormat: '',
+    printType: '',
+    lamination: '',
+    uvVarnish: '',
+    cutting: '',
+    embossing1: '',
+    embossing2: '',
+    dieCutting: '',
+    gluing: '',
+    binding: '',
+
+    // Срок
+    shippingDate: '',
+};
+
+const initialResults = {
+    total: '',
+    vat: '',
+    final: '',
+};
+
+function App() {
+    const [step, setStep] = useState('customer');
+
+    const [formData, setFormData] = useState(initialFormData);
+
+    const [results, setResults] = useState(initialResults);
+
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleChange = (newData) => {
-        setFormData(newData);
+    const [error, setError] = useState('');
+
+    // Обновление данных формы
+    const updateFormData = (field, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+
+        setError('');
     };
 
+    // Переход вперёд
     const nextStep = () => {
-        const steps = ['customer', 'order', 'materials', 'operations', 'results'];
+        const steps = [
+            'customer',
+            'materials',
+            'operations',
+            'order',
+            'results',
+        ];
+
         const currentIndex = steps.indexOf(step);
+
         if (currentIndex < steps.length - 1) {
+            setError('');
             setStep(steps[currentIndex + 1]);
         }
     };
 
+    // Переход назад
     const prevStep = () => {
-        const steps = ['customer', 'order', 'materials', 'operations', 'results'];
+        const steps = [
+            'customer',
+            'materials',
+            'operations',
+            'order',
+            'results',
+        ];
+
         const currentIndex = steps.indexOf(step);
+
         if (currentIndex > 0) {
+            setError('');
             setStep(steps[currentIndex - 1]);
         }
     };
 
+    // Расчёт
     const handleCalculate = async () => {
         setIsLoading(true);
+        setError('');
+
         try {
+            console.log(
+                'Отправляем данные на сервер:',
+                formData
+            );
+
             const result = await calculateOrder(formData);
-            if (result.success) {
-                setResults({
-                    total: result.total,
-                    vat: result.vat,
-                    final: result.final,
-                });
-                setStep('results');
-            } else {
-                setError(result.error || 'Ошибка при расчёте');
+
+            console.log(
+                'Ответ сервера:',
+                result
+            );
+
+            if (!result || !result.success) {
+                throw new Error(
+                    result?.error ||
+                    result?.message ||
+                    'Не удалось выполнить расчёт'
+                );
             }
+
+            setResults({
+                total: result.total || '0.00 ₽',
+                vat: result.vat || '0.00 ₽',
+                final: result.final || '0.00 ₽',
+            });
+
+            setStep('results');
+
         } catch (err) {
-            setError(err.message);
+            console.error(
+                'Ошибка расчёта:',
+                err
+            );
+
+            setError(
+                err.message ||
+                'Не удалось выполнить расчёт'
+            );
+
         } finally {
             setIsLoading(false);
         }
     };
 
+    // Полная очистка
     const handleClear = () => {
-        if (window.confirm('Очистить все данные?')) {
-            setFormData({});
-            setResults(null);
-            setStep('customer');
-        }
-    };
+        const confirmed = window.confirm(
+            'Очистить все введённые данные?'
+        );
 
-    const handleNewCalculation = () => {
-        setFormData({});
-        setResults(null);
+        if (!confirmed) {
+            return;
+        }
+
+        setFormData(initialFormData);
+        setResults(initialResults);
+        setError('');
         setStep('customer');
     };
 
+    // Новый расчёт
+    const handleNewCalculation = () => {
+        setFormData(initialFormData);
+        setResults(initialResults);
+        setError('');
+        setStep('customer');
+    };
+
+    // Отображение текущего шага
+    const renderStep = () => {
+        switch (step) {
+            case 'customer':
+                return (
+                    <StepCustomer
+                        formData={formData}
+                        updateFormData={updateFormData}
+                        onNext={nextStep}
+                    />
+                );
+
+            case 'materials':
+                return (
+                    <StepMaterials
+                        formData={formData}
+                        updateFormData={updateFormData}
+                        onNext={nextStep}
+                        onBack={prevStep}
+                    />
+                );
+
+            case 'operations':
+                return (
+                    <StepOperations
+                        formData={formData}
+                        updateFormData={updateFormData}
+                        onNext={nextStep}
+                        onBack={prevStep}
+                    />
+                );
+
+            case 'order':
+                return (
+                    <StepOrder
+                        formData={formData}
+                        updateFormData={updateFormData}
+                        onCalculate={handleCalculate}
+                        onBack={prevStep}
+                        isLoading={isLoading}
+                    />
+                );
+
+            case 'results':
+                return (
+                    <StepResults
+                        formData={formData}
+                        results={results}
+                        onBack={prevStep}
+                        onClear={handleClear}
+                        onNew={handleNewCalculation}
+                    />
+                );
+
+            default:
+                return null;
+        }
+    };
+
     return (
-        <div className="container">
-            <header>
-                <h1>Калькулятор расчета заказа</h1>
-            </header>
+        <div className="app">
 
-            <nav className="navigation">
-                {['customer', 'order', 'materials', 'operations', 'results'].map((s) => (
-                    <button
-                        key={s}
-                        className={`nav-btn ${step === s ? 'active' : ''}`}
-                        onClick={() => setStep(s)}
-                    >
-                        {s === 'customer' && 'Заказчик'}
-                        {s === 'order' && 'Заказ'}
-                        {s === 'materials' && 'Материалы'}
-                        {s === 'operations' && 'Операции'}
-                        {s === 'results' && 'Результаты'}
-                    </button>
-                ))}
-            </nav>
+            <main className="container">
 
-            {step === 'customer' && (
-                <StepCustomer
-                    data={formData}
-                    onChange={handleChange}
-                    onNext={nextStep}
-                />
-            )}
+                {/* ШАПКА */}
 
-            {step === 'order' && (
-                <StepOrder
-                    data={formData}
-                    onChange={handleChange}
-                    onNext={nextStep}
-                    onPrev={prevStep}
-                />
-            )}
+                <header>
+                    <h1>КАЛЬКУЛЯТОР ПЕЧАТИ</h1>
 
-            {step === 'materials' && (
-                <StepMaterials
-                    data={formData}
-                    onChange={handleChange}
-                    onNext={nextStep}
-                    onPrev={prevStep}
-                />
-            )}
+                    <nav className="navigation">
 
-            {step === 'operations' && (
-                <StepOperations
-                    data={formData}
-                    onChange={handleChange}
-                    onCalculate={handleCalculate}
-                    onPrev={prevStep}
-                    isLoading={isLoading}
-                />
-            )}
+                        <button
+                            type="button"
+                            className={
+                                step === 'customer'
+                                    ? 'nav-btn active'
+                                    : 'nav-btn'
+                            }
+                            onClick={() => {
+                                setError('');
+                                setStep('customer');
+                            }}
+                        >
+                            Заказчик
+                        </button>
 
-            {step === 'results' && (
-                <StepResults
-                    results={results}
-                    onClear={handleClear}
-                    onNew={handleNewCalculation}
-                    onPrev={prevStep}
-                />
-            )}
+                        <button
+                            type="button"
+                            className={
+                                step === 'materials'
+                                    ? 'nav-btn active'
+                                    : 'nav-btn'
+                            }
+                            onClick={() => {
+                                setError('');
+                                setStep('materials');
+                            }}
+                        >
+                            Материал
+                        </button>
 
-            {error && (
-                <div className="error-message" onClick={() => setError(null)}>
-                    ❌ {error}
-                </div>
-            )}
+                        <button
+                            type="button"
+                            className={
+                                step === 'operations'
+                                    ? 'nav-btn active'
+                                    : 'nav-btn'
+                            }
+                            onClick={() => {
+                                setError('');
+                                setStep('operations');
+                            }}
+                        >
+                            Операции
+                        </button>
+
+                        <button
+                            type="button"
+                            className={
+                                step === 'order'
+                                    ? 'nav-btn active'
+                                    : 'nav-btn'
+                            }
+                            onClick={() => {
+                                setError('');
+                                setStep('order');
+                            }}
+                        >
+                            Заказ
+                        </button>
+
+                    </nav>
+                </header>
+
+                {/* ОШИБКА */}
+
+                {error && (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                )}
+
+                {/* ТЕКУЩИЙ ШАГ */}
+
+                {renderStep()}
+
+            </main>
+
         </div>
     );
-};
+}
 
 export default App;

@@ -1,51 +1,81 @@
 import React from 'react';
 
-const StepOrder = ({ data, onChange, onNext, onPrev }) => {
+const StepOrder = ({
+                       formData,
+                       updateFormData,
+                       onCalculate,
+                       onBack,
+                       isLoading,
+                   }) => {
     const handleChange = (e) => {
-        onChange({ ...data, [e.target.id]: e.target.value });
+        const { id, value } = e.target;
+
+        updateFormData(id, value);
     };
 
     return (
         <div className="page active">
             <div className="section">
                 <h2>Информация о заказе</h2>
+
                 <div className="order-info">
                     <input
                         type="text"
-                        id="product-name"
+                        id="productName"
                         placeholder="Наименование изделия"
-                        value={data.productName || ''}
+                        value={formData.productName || ''}
                         onChange={handleChange}
                     />
+
                     <input
                         type="number"
                         id="quantity"
                         placeholder="Количество изделий"
                         min="1"
-                        value={data.quantity || ''}
+                        value={formData.quantity || ''}
                         onChange={handleChange}
                     />
+
                     <input
                         type="number"
-                        id="per-sheet"
+                        id="perSheet"
                         placeholder="Количество на листе"
                         step="0.1"
                         min="0.1"
-                        value={data.perSheet || ''}
+                        value={formData.perSheet || ''}
                         onChange={handleChange}
                     />
+
                     <input
                         type="text"
                         id="notes"
                         placeholder="Примечания"
-                        value={data.notes || ''}
+                        value={formData.notes || ''}
                         onChange={handleChange}
                     />
                 </div>
             </div>
+
             <div className="page-navigation">
-                <button className="prev-btn" onClick={onPrev}>← Назад</button>
-                <button className="next-btn" onClick={onNext}>Далее →</button>
+                <button
+                    className="prev-btn"
+                    onClick={onBack}
+                    type="button"
+                    disabled={isLoading}
+                >
+                    ← Назад
+                </button>
+
+                <button
+                    className="next-btn"
+                    onClick={onCalculate}
+                    type="button"
+                    disabled={isLoading}
+                >
+                    {isLoading
+                        ? '⏳ Расчёт...'
+                        : 'Рассчитать →'}
+                </button>
             </div>
         </div>
     );

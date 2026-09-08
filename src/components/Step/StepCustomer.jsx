@@ -1,40 +1,56 @@
 import React from 'react';
 
-const StepCustomer = ({ data, onChange, onNext }) => {
+const StepCustomer = ({
+                          formData,
+                          updateFormData,
+                          onNext,
+                      }) => {
     const handleChange = (e) => {
-        onChange({ ...data, [e.target.id]: e.target.value });
+        const { id, value } = e.target;
+
+        updateFormData(id, value);
     };
 
     return (
         <div className="page active">
             <div className="section">
                 <h2>Информация о заказчике</h2>
+
                 <div className="customer-info">
                     <input
                         type="text"
-                        id="company-name"
+                        id="companyName"
                         placeholder="Наименование компании"
-                        value={data.companyName || ''}
+                        value={formData.companyName || ''}
                         onChange={handleChange}
                     />
+
                     <input
                         type="text"
-                        id="company-address"
+                        id="companyAddress"
                         placeholder="Адрес"
-                        value={data.companyAddress || ''}
+                        value={formData.companyAddress || ''}
                         onChange={handleChange}
                     />
+
                     <input
                         type="text"
-                        id="company-contacts"
+                        id="companyContacts"
                         placeholder="Контакты"
-                        value={data.companyContacts || ''}
+                        value={formData.companyContacts || ''}
                         onChange={handleChange}
                     />
                 </div>
             </div>
+
             <div className="page-navigation">
-                <button className="next-btn" onClick={onNext}>Далее →</button>
+                <button
+                    type="button"
+                    className="next-btn"
+                    onClick={onNext}
+                >
+                    Далее →
+                </button>
             </div>
         </div>
     );
