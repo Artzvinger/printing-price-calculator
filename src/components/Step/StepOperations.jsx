@@ -187,7 +187,7 @@ const StepOperations = ({
                     onClick={onNext}
                     type="button"
                 >
-                    Рассчитать →
+                    Далее →
                 </button>
             </div>
         </div>
