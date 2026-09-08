@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# 🖨️ Калькулятор типографии
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Веб-приложение для мгновенного расчёта стоимости полиграфической продукции.  
+Интегрирован с **Google Sheets** через **Google Apps Script** — все формулы и цены хранятся и обновляются в таблице.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Демо
 
-### `npm start`
+[👉 Открыть демо](https://printing-price-calculator-iota.vercel.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ✨ Возможности
 
-### `npm test`
+- 📋 **Пошаговый ввод данных** — заказчик, заказ, материалы, операции, результат
+- 💱 **Автообновление курсов валют** — USD и EUR напрямую с сайта ЦБ РФ
+- 💾 **Автосохранение** — все данные сохраняются в `localStorage`
+- 📊 **Интеграция с Google Sheets** — расчёт происходит по формулам в таблице
+- 🛡️ **Защита от ошибок** — валидация ввода и понятные подсказки
+- 📱 **Адаптивный интерфейс** — удобно работать с любого устройства
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🛠️ Стек технологий
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Frontend:** React, JavaScript, CSS3
+- **Backend (прокси):** Node.js (Vercel Serverless Functions)
+- **API:** Google Apps Script, Google Sheets API
+- **Деплой:** Vercel
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📦 Установка и запуск
 
-### `npm run eject`
+```bash
+# Клонируй репозиторий
+git clone https://github.com/Artzvinger/printing-price-calculator.git
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Перейди в папку проекта
+cd printing-price-calculator
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# Установи зависимости
+npm install
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Запусти локально
+npm start
