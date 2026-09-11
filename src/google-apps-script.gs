@@ -34,11 +34,6 @@ function doPost(e) {
       data.companyContacts || ''
     );
 
-
-    // ==========================================
-    // ИЗДЕЛИЕ
-    // ==========================================
-
     sheet.getRange('A12').setValue(
       data.productName || ''
     );
@@ -147,7 +142,6 @@ function doPost(e) {
 
     SpreadsheetApp.flush();
 
-    // Даём формулам таблицы время пересчитаться.
     Utilities.sleep(1000);
 
     SpreadsheetApp.flush();
@@ -191,7 +185,6 @@ function doPost(e) {
     });
   }
 }
-
 
 function normalizeOperationValue(cell, value) {
 
