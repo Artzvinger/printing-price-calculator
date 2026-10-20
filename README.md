@@ -11,6 +11,23 @@
 
 ---
 
+## 📸 Скриншоты
+  
+### Информация о заказчике
+<img width="1079" height="453" alt="Screenshot_2" src="https://github.com/user-attachments/assets/ec6354d5-7326-4390-b378-b9015ca68d2e" />
+
+### Параметры заказа 
+<img width="1091" height="831" alt="Screenshot_3" src="https://github.com/user-attachments/assets/e8547615-9522-45c6-a257-78338a866bad" />
+
+### Информация о заказе и курс ЦБ
+<img width="1089" height="650" alt="Screenshot_4" src="https://github.com/user-attachments/assets/8fb329c1-beae-490b-9423-532b4e5da879" />
+
+### Результат расчёта
+<img width="1359" height="940" alt="Screenshot_1" src="https://github.com/user-attachments/assets/8f678d36-3090-471c-b5da-eb2331f933b9" />
+
+
+---
+
 ## ✨ Возможности
 
 - 📋 **Пошаговый ввод данных** — заказчик, заказ, материалы, операции, результат
@@ -31,7 +48,6 @@
 - **Тесты:** Jest + React Testing Library
 
 ---
-
 ## 📦 Установка и запуск
 
 ```bash
@@ -46,47 +62,3 @@ npm install
 
 # Запусти локально (включая прокси до Google Apps Script)
 npm start
-```
-
-Приложение открывается на `http://localhost:3000`. Локальный прокси
-(`src/setupProxy.js`) пробрасывает запросы `/api/proxy` на Google Apps Script,
-поэтому расчёт работает и без Vercel.
-
-### 🔧 Переменные окружения
-
-Скопируй `.env.example` в `.env.local` и при необходимости укажи свой URL:
-
-```bash
-cp .env.example .env.local   # Windows: copy .env.example .env.local
-```
-
-| Переменная        | Где задаётся          | Описание                              |
-| ----------------- | --------------------- | ------------------------------------- |
-| `GAS_WEB_APP_URL` | `.env.local` / Vercel | URL развёрнутого Apps Script          |
-| `SPREADSHEET_ID`  | Свойства скрипта Apps Script | ID Google-таблицы (см. ниже) |
-
-`SPREADSHEET_ID` задаётся не в `.env`, а в самом скрипте:
-**Расширения → Apps Script → Файл → Настройки проекта → Свойства скрипта →**
-ключ `SPREADSHEET_ID`, значение — ID вашей таблицы.
-
----
-
-## 🧪 Тесты
-
-```bash
-npm test                 # запуск в интерактивном режиме
-CI=true npm test         # однократный прогон всех тестов
-```
-
-Покрывают: загрузку курсов валют, компонент шага «Заказ», корневой компонент
-`App` и хук `useLocalStorage`.
-
----
-
-## 📦 Деплой
-
-```bash
-npm run build            # production-сборка в папку build
-```
-
-На Vercel задай переменную `GAS_WEB_APP_URL` в настройках проекта.
