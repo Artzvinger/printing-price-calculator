@@ -6,6 +6,9 @@ const StepOrder = ({
                        onCalculate,
                        onBack,
                        isLoading,
+                       onRefreshRates,
+                       isRatesLoading,
+                       ratesStatus,
                    }) => {
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -54,6 +57,63 @@ const StepOrder = ({
                         onChange={handleChange}
                     />
                 </div>
+            </div>
+
+            <div className="section">
+                <h2>Курсы валют (ЦБ РФ)</h2>
+
+                <div className="rates-grid">
+                    <div className="rate-field">
+                        <label htmlFor="usdRate">USD:</label>
+
+                        <div className="rate-input">
+                            <input
+                                type="number"
+                                id="usdRate"
+                                step="0.01"
+                                min="0"
+                                placeholder="Курс USD"
+                                value={formData.usdRate || ''}
+                                onChange={handleChange}
+                            />
+
+                            <span>₽</span>
+                        </div>
+                    </div>
+
+                    <div className="rate-field">
+                        <label htmlFor="eurRate">EUR:</label>
+
+                        <div className="rate-input">
+                            <input
+                                type="number"
+                                id="eurRate"
+                                step="0.01"
+                                min="0"
+                                placeholder="Курс EUR"
+                                value={formData.eurRate || ''}
+                                onChange={handleChange}
+                            />
+
+                            <span>₽</span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="refresh-rates-btn"
+                        onClick={onRefreshRates}
+                        disabled={isRatesLoading}
+                    >
+                        {isRatesLoading
+                            ? '⏳ Обновление...'
+                            : '🔄 Обновить'}
+                    </button>
+                </div>
+
+                {ratesStatus && (
+                    <p className="rates-status">{ratesStatus}</p>
+                )}
             </div>
 
             <div className="page-navigation">

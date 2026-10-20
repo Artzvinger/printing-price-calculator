@@ -1030,3 +1030,69 @@ label {
         margin-top: 18px;
     }
 }
+
+.rates-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+}
+
+.rate-field {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 140px;
+}
+
+.rate-field label {
+    color: #4a5568;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rate-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.rate-input input {
+    width: 130px;
+}
+
+.rate-input span {
+    color: #718096;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.refresh-rates-btn {
+    padding: 14px 22px;
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.refresh-rates-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 172, 254, 0.4);
+}
+
+.refresh-rates-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.rates-status {
+    margin-top: 12px;
+    color: #718096;
+    font-size: 13px;
+}

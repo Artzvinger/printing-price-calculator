@@ -14,7 +14,10 @@ export default async function handler(req, res) {
         });
     }
 
+    // URL развёрнутого веб-приложения Google Apps Script.
+    // Переопределяется переменной окружения GAS_WEB_APP_URL (см. .env.example).
     const TARGET_URL =
+        process.env.GAS_WEB_APP_URL ||
         'https://script.google.com/macros/s/AKfycbzYAbY4S0quoK-lLgGiIjlfmzDwsnTVjuK8_1qlkycGvzk5BdvmELmFPS7QDWheWTSo/exec';
 
     try {

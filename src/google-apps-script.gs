@@ -9,9 +9,14 @@ function doPost(e) {
 
     const data = JSON.parse(e.postData.contents);
 
-    const ss = SpreadsheetApp.openById(
-      '1dHH91iMv4_z-udSGFheLkQlzAXsQL7V79sLayiK3_VU'
-    );
+    // ID таблицы выносится в PropertiesService (Файл → Настройки проекта →
+    // Свойства скрипта → SPREADSHEET_ID), чтобы не хранить его в коде.
+    const SPREADSHEET_ID =
+      PropertiesService.getScriptProperties().getProperty(
+        'SPREADSHEET_ID'
+      ) || '1dHH91iMv4_z-udSGFheLkQlzAXsQL7V79sLayiK3_VU';
+
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
     const sheet = ss.getSheetByName('Лист1');
 
@@ -168,6 +173,14 @@ function doPost(e) {
 
       final: sheet
         .getRange('H42')
+        .getDisplayValue(),
+
+      usdRate: sheet
+        .getRange('E3')
+        .getDisplayValue(),
+
+      eurRate: sheet
+        .getRange('F3')
         .getDisplayValue()
     };
 

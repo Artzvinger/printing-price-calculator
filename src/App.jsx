@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles/style.css';
 
 import StepCustomer from './components/Step/StepCustomer';
@@ -8,6 +8,8 @@ import StepOrder from './components/Step/StepOrder';
 import StepResults from './components/Step/StepResults';
 
 import { calculateOrder } from './api/googleSheetsApi';
+import { fetchCurrencyRates } from './api/currencyApi';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 const steps = [
     'customer',
@@ -124,15 +126,49 @@ const numericFields = [
 ];
 
 function App() {
-    const [step, setStep] = useState('customer');
-    const [formData, setFormData] = useState({
-        ...initialFormData,
-    });
-    const [results, setResults] = useState({
-        ...initialResults,
-    });
+    const [step, setStep] = useLocalStorage(
+        'printing-calculator-step',
+        'customer'
+    );
+    const [formData, setFormData] = useLocalStorage(
+        'printing-calculator-form',
+        initialFormData
+    );
+    const [results, setResults] = useLocalStorage(
+        'printing-calculator-results',
+        initialResults
+    );
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [isRatesLoading, setIsRatesLoading] = useState(false);
+    const [ratesStatus, setRatesStatus] = useState('');
+
+    const refreshCurrencyRates = async () => {
+        setIsRatesLoading(true);
+        setRatesStatus('');
+
+        try {
+            const rates = await fetchCurrencyRates();
+
+            setFormData((prev) => ({
+                ...prev,
+                usdRate: rates.usdRate,
+                eurRate: rates.eurRate,
+            }));
+
+            setRatesStatus('Курсы обновлены с сайта ЦБ РФ');
+        } catch (err) {
+            console.error('Не удалось получить курсы валют:', err);
+            setRatesStatus('Не удалось обновить курсы валют');
+        } finally {
+            setIsRatesLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        refreshCurrencyRates();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const updateFormData = (field, value) => {
         setFormData((prev) => ({
@@ -258,6 +294,7 @@ function App() {
         setError('');
         setIsLoading(false);
         setStep('customer');
+        refreshCurrencyRates();
     };
 
     const handleClear = () => {
@@ -322,6 +359,9 @@ function App() {
                         onCalculate={handleCalculate}
                         onBack={prevStep}
                         isLoading={isLoading}
+                        onRefreshRates={refreshCurrencyRates}
+                        isRatesLoading={isRatesLoading}
+                        ratesStatus={ratesStatus}
                     />
                 );
 

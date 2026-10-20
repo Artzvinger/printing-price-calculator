@@ -28,6 +28,7 @@
 - **Backend (прокси):** Node.js (Vercel Serverless Functions)
 - **API:** Google Apps Script, Google Sheets API
 - **Деплой:** Vercel
+- **Тесты:** Jest + React Testing Library
 
 ---
 
@@ -43,5 +44,49 @@ cd printing-price-calculator
 # Установи зависимости
 npm install
 
-# Запусти локально
+# Запусти локально (включая прокси до Google Apps Script)
 npm start
+```
+
+Приложение открывается на `http://localhost:3000`. Локальный прокси
+(`src/setupProxy.js`) пробрасывает запросы `/api/proxy` на Google Apps Script,
+поэтому расчёт работает и без Vercel.
+
+### 🔧 Переменные окружения
+
+Скопируй `.env.example` в `.env.local` и при необходимости укажи свой URL:
+
+```bash
+cp .env.example .env.local   # Windows: copy .env.example .env.local
+```
+
+| Переменная        | Где задаётся          | Описание                              |
+| ----------------- | --------------------- | ------------------------------------- |
+| `GAS_WEB_APP_URL` | `.env.local` / Vercel | URL развёрнутого Apps Script          |
+| `SPREADSHEET_ID`  | Свойства скрипта Apps Script | ID Google-таблицы (см. ниже) |
+
+`SPREADSHEET_ID` задаётся не в `.env`, а в самом скрипте:
+**Расширения → Apps Script → Файл → Настройки проекта → Свойства скрипта →**
+ключ `SPREADSHEET_ID`, значение — ID вашей таблицы.
+
+---
+
+## 🧪 Тесты
+
+```bash
+npm test                 # запуск в интерактивном режиме
+CI=true npm test         # однократный прогон всех тестов
+```
+
+Покрывают: загрузку курсов валют, компонент шага «Заказ», корневой компонент
+`App` и хук `useLocalStorage`.
+
+---
+
+## 📦 Деплой
+
+```bash
+npm run build            # production-сборка в папку build
+```
+
+На Vercel задай переменную `GAS_WEB_APP_URL` в настройках проекта.
