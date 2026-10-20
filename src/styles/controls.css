@@ -1,0 +1,149 @@
+/* ==========================================================================
+   controls.css — поля, селекты, кнопки, карточки секций
+   ========================================================================== */
+
+.section {
+    margin-top: 20px;
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.section h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.section h2::before {
+    content: '';
+    width: 4px;
+    height: 22px;
+    background: var(--accent);
+    border-radius: 2px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    color: var(--ink);
+    background: var(--surface);
+    font-size: 15px;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+input::placeholder {
+    color: var(--muted);
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* --- навигация между шагами --- */
+.page-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* --- кнопки --- */
+button {
+    cursor: pointer;
+}
+
+.prev-btn,
+.next-btn,
+.print-btn,
+#clear-btn,
+#new-calculation-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.next-btn,
+.print-btn {
+    color: #ffffff;
+    background: var(--accent);
+}
+
+.next-btn:hover,
+.print-btn:hover {
+    background: var(--accent-strong);
+}
+
+.prev-btn {
+    color: var(--ink);
+    background: var(--surface);
+    border-color: var(--line-strong);
+}
+
+.prev-btn:hover {
+    background: var(--surface-soft);
+}
+
+#clear-btn {
+    color: var(--accent);
+    background: var(--surface);
+    border-color: rgba(178, 58, 47, 0.35);
+}
+
+#clear-btn:hover {
+    background: var(--accent-soft);
+}
+
+#new-calculation-btn {
+    color: var(--ink-soft);
+    background: var(--surface);
+    border-color: var(--line-strong);
+}
+
+#new-calculation-btn:hover {
+    background: var(--surface-soft);
+}
+
+.prev-btn:disabled,
+.next-btn:disabled,
+.print-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}

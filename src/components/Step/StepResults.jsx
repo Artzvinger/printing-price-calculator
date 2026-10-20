@@ -13,6 +13,25 @@ const operations = [
     ['Брошюровка', 'binding'],
 ];
 
+const Field = ({ label, value }) => (
+    <div className="doc-field">
+        <span className="doc-field-label">{label}</span>
+        <span className="doc-field-value">
+            {value || '—'}
+        </span>
+    </div>
+);
+
+const formatDate = (iso) => {
+    if (!iso) {
+        return '—';
+    }
+
+    const [year, month, day] = iso.split('-');
+
+    return `${day}.${month}.${year}`;
+};
+
 const StepResults = ({
     formData,
     results,
@@ -26,7 +45,7 @@ const StepResults = ({
 
     const formatOperation = (value) => {
         if (!value || value === 'нет') {
-            return 'Нет';
+            return '—';
         }
 
         return value;
@@ -37,141 +56,142 @@ const StepResults = ({
             ? 'Картон'
             : 'Бумага';
 
+    const calcDate = new Date().toLocaleDateString('ru-RU');
+
     return (
         <div className="page active results-page">
             <div className="result-document">
-                <div className="result-header">
-                    <div>
-                        <h2>Результат расчёта</h2>
-                        <p className="result-subtitle">
-                            Калькулятор печати
-                        </p>
-                    </div>
+                <header className="doc-head">
+                    <div className="doc-brand">
+                        <span className="doc-mark">КП</span>
 
-                    <div className="result-status">
-                        Расчёт выполнен
-                    </div>
-                </div>
-
-                <div className="result-block">
-                    <h3>Информация о заказчике</h3>
-
-                    <div className="result-grid">
-                        <div className="result-field">
-                            <span>Компания</span>
-                            <strong>
-                                {formData.companyName || '—'}
-                            </strong>
-                        </div>
-
-                        <div className="result-field">
-                            <span>Адрес</span>
-                            <strong>
-                                {formData.companyAddress || '—'}
-                            </strong>
-                        </div>
-
-                        <div className="result-field">
-                            <span>Контакты</span>
-                            <strong>
-                                {formData.companyContacts || '—'}
-                            </strong>
+                        <div className="doc-brand-text">
+                            <strong>Калькулятор печати</strong>
+                            <span>
+                                Расчёт стоимости полиграфической продукции
+                            </span>
                         </div>
                     </div>
-                </div>
 
-                <div className="result-block">
-                    <h3>Информация об изделии</h3>
-
-                    <div className="result-grid">
-                        <div className="result-field">
-                            <span>Наименование изделия</span>
-                            <strong>
-                                {formData.productName || '—'}
-                            </strong>
+                    <div className="doc-meta">
+                        <div className="doc-meta-row">
+                            <span>Документ</span>
+                            <strong>Коммерческое предложение</strong>
                         </div>
 
-                        <div className="result-field">
-                            <span>Количество изделий</span>
-                            <strong>
-                                {formData.quantity || '—'}
-                            </strong>
+                        <div className="doc-meta-row">
+                            <span>Дата расчёта</span>
+                            <strong>{calcDate}</strong>
                         </div>
 
-                        <div className="result-field">
-                            <span>Изделий на листе</span>
-                            <strong>
-                                {formData.perSheet || '—'}
-                            </strong>
-                        </div>
-
-                        <div className="result-field">
+                        <div className="doc-meta-row">
                             <span>Дата отгрузки</span>
                             <strong>
-                                {formData.shippingDate || '—'}
+                                {formatDate(formData.shippingDate)}
                             </strong>
                         </div>
 
-                        {formData.notes && (
-                            <div className="result-field result-field-wide">
-                                <span>Примечания</span>
-                                <strong>
-                                    {formData.notes}
-                                </strong>
-                            </div>
-                        )}
+                        <div className="doc-status">
+                            Расчёт выполнен
+                        </div>
                     </div>
-                </div>
+                </header>
 
-                <div className="result-block">
+                <div className="doc-rule" />
+
+                <section className="doc-section">
+                    <h3>Заказчик</h3>
+
+                    <div className="doc-grid doc-grid--3">
+                        <Field
+                            label="Компания"
+                            value={formData.companyName}
+                        />
+
+                        <Field
+                            label="Адрес"
+                            value={formData.companyAddress}
+                        />
+
+                        <Field
+                            label="Контакты"
+                            value={formData.companyContacts}
+                        />
+                    </div>
+                </section>
+
+                <section className="doc-section">
+                    <h3>Изделие</h3>
+
+                    <div className="doc-grid doc-grid--3">
+                        <Field
+                            label="Наименование"
+                            value={formData.productName}
+                        />
+
+                        <Field
+                            label="Тираж, шт"
+                            value={formData.quantity}
+                        />
+
+                        <Field
+                            label="Изделий на листе"
+                            value={formData.perSheet}
+                        />
+                    </div>
+
+                    {formData.notes && (
+                        <p className="doc-note">
+                            <span>Примечание:</span>
+                            {formData.notes}
+                        </p>
+                    )}
+                </section>
+
+                <section className="doc-section">
                     <h3>Материал и формат</h3>
 
-                    <div className="result-grid">
-                        <div className="result-field">
-                            <span>Материал</span>
-                            <strong>{materialName}</strong>
-                        </div>
+                    <div className="doc-grid doc-grid--3">
+                        <Field
+                            label="Материал"
+                            value={materialName}
+                        />
 
-                        <div className="result-field">
-                            <span>Цена материала</span>
-                            <strong>
-                                {formData.materialPrice || '—'}{' '}
-                                {formData.materialCurrency || '₽'} / кг
-                            </strong>
-                        </div>
+                        <Field
+                            label="Цена материала"
+                            value={`${formData.materialPrice || '—'} ${
+                                formData.materialCurrency || '₽'
+                            } / кг`}
+                        />
 
-                        <div className="result-field">
-                            <span>Формат</span>
-                            <strong>
-                                {formData.formatSize || '—'}
-                            </strong>
-                        </div>
+                        <Field
+                            label="Формат"
+                            value={formData.formatSize}
+                        />
 
-                        <div className="result-field">
-                            <span>Формат печати</span>
-                            <strong>
-                                {formData.printWidth || '—'} ×{' '}
-                                {formData.printHeight || '—'} мм
-                            </strong>
-                        </div>
+                        <Field
+                            label="Формат печати"
+                            value={`${formData.printWidth || '—'} × ${
+                                formData.printHeight || '—'
+                            } мм`}
+                        />
 
-                        <div className="result-field">
-                            <span>Закупочный формат</span>
-                            <strong>
-                                {formData.purchaseWidth || '—'} ×{' '}
-                                {formData.purchaseHeight || '—'} мм
-                            </strong>
-                        </div>
+                        <Field
+                            label="Закупочный формат"
+                            value={`${formData.purchaseWidth || '—'} × ${
+                                formData.purchaseHeight || '—'
+                            } мм`}
+                        />
                     </div>
-                </div>
+                </section>
 
-                <div className="result-block">
+                <section className="doc-section">
                     <h3>Операции</h3>
 
-                    <div className="result-operations">
+                    <div className="doc-ops">
                         {operations.map(([label, field]) => (
                             <div
-                                className="result-operation"
+                                className="doc-op"
                                 key={field}
                             >
                                 <span>{label}</span>
@@ -184,78 +204,76 @@ const StepResults = ({
                             </div>
                         ))}
                     </div>
-                </div>
+                </section>
 
-                <div className="result-block">
+                <section className="doc-section">
                     <h3>Расчётные показатели</h3>
 
-                    <div className="result-grid">
-                        <div className="result-field">
-                            <span>Расчётный тираж</span>
-                            <strong>
-                                {results?.circulation || '—'}
-                            </strong>
-                        </div>
+                    <div className="doc-grid doc-grid--2">
+                        <Field
+                            label="Расчётный тираж"
+                            value={results?.circulation}
+                        />
 
-                        <div className="result-field">
-                            <span>Расход материала</span>
-                            <strong>
-                                {results?.sheetsKg || '—'}
-                            </strong>
-                        </div>
+                        <Field
+                            label="Расход материала"
+                            value={results?.sheetsKg}
+                        />
 
-                        <div className="result-field">
-                            <span>Курс USD</span>
-                            <strong>
-                                {results?.usdRate
+                        <Field
+                            label="Курс USD"
+                            value={
+                                results?.usdRate
                                     ? `${results.usdRate} ₽`
-                                    : '—'}
-                            </strong>
-                        </div>
+                                    : '—'
+                            }
+                        />
 
-                        <div className="result-field">
-                            <span>Курс EUR</span>
-                            <strong>
-                                {results?.eurRate
+                        <Field
+                            label="Курс EUR"
+                            value={
+                                results?.eurRate
                                     ? `${results.eurRate} ₽`
-                                    : '—'}
-                            </strong>
+                                    : '—'
+                            }
+                        />
+                    </div>
+                </section>
+
+                <section className="doc-totals">
+                    <div className="doc-total-row">
+                        <span>Итого</span>
+                        <strong>{results?.total || '0.00 ₽'}</strong>
+                    </div>
+
+                    <div className="doc-total-row">
+                        <span>НДС (20%)</span>
+                        <strong>{results?.vat || '0.00 ₽'}</strong>
+                    </div>
+
+                    <div className="doc-total-row doc-total-row--final">
+                        <span>Всего к оплате</span>
+                        <strong>{results?.final || '0.00 ₽'}</strong>
+                    </div>
+                </section>
+
+                <footer className="doc-foot">
+                    <div className="doc-signs">
+                        <div className="doc-sign">
+                            <span>Исполнитель</span>
+                            <em />
+                        </div>
+
+                        <div className="doc-sign">
+                            <span>Заказчик</span>
+                            <em />
                         </div>
                     </div>
-                </div>
 
-                <div className="result-price">
-                    <div className="result-price-row">
-                        <span>Итого:</span>
-                        <strong>
-                            {results?.total || '0.00 ₽'}
-                        </strong>
-                    </div>
-
-                    <div className="result-price-row">
-                        <span>НДС (20%):</span>
-                        <strong>
-                            {results?.vat || '0.00 ₽'}
-                        </strong>
-                    </div>
-
-                    <div className="result-price-row result-price-final">
-                        <span>Всего к оплате:</span>
-                        <strong>
-                            {results?.final || '0.00 ₽'}
-                        </strong>
-                    </div>
-                </div>
-
-                <div className="result-footer">
-                    <span>
-                        Расчёт выполнен автоматически
-                    </span>
-
-                    <span>
-                        Калькулятор печати
-                    </span>
-                </div>
+                    <p className="doc-foot-note">
+                        Расчёт выполнен автоматически · Калькулятор печати
+                    </p>
+                </footer>
             </div>
 
             <div className="result-actions">
@@ -272,7 +290,7 @@ const StepResults = ({
                     onClick={handlePrint}
                     type="button"
                 >
-                    🖨 Печать / PDF
+                    🖨 Печать / Сохранить PDF
                 </button>
 
                 <button

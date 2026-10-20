@@ -1,0 +1,297 @@
+/* ==========================================================================
+   results.css — строгий расчётный лист (коммерческое предложение)
+   ========================================================================== */
+
+.results-page {
+    width: 100%;
+    margin-top: 28px;
+}
+
+.result-document {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 52px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: var(--shadow-md);
+}
+
+/* --- шапка документа --- */
+.doc-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+}
+
+.doc-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.doc-mark {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+    color: #ffffff;
+    background: var(--accent);
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.doc-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.doc-brand-text strong {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.doc-brand-text span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.doc-meta {
+    text-align: right;
+}
+
+.doc-meta-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 4px;
+    font-size: 13px;
+}
+
+.doc-meta-row span {
+    color: var(--muted);
+}
+
+.doc-meta-row strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.doc-status {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    color: var(--ok);
+    background: #e9f3ec;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* --- акцентная линейка --- */
+.doc-rule {
+    height: 3px;
+    margin: 24px 0 28px;
+    background: var(--accent);
+}
+
+/* --- разделы --- */
+.doc-section {
+    margin-bottom: 26px;
+}
+
+.doc-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    color: var(--ink-soft);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.doc-section h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.doc-grid {
+    display: grid;
+    gap: 14px 24px;
+}
+
+.doc-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.doc-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.doc-field-label {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.doc-field-value {
+    display: block;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+}
+
+.doc-note {
+    margin-top: 14px;
+    color: var(--ink-soft);
+    font-size: 13px;
+}
+
+.doc-note span {
+    margin-right: 6px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+/* --- операции --- */
+.doc-ops {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 34px;
+}
+
+.doc-op {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--line);
+}
+
+.doc-op span {
+    color: var(--ink-soft);
+    font-size: 14px;
+}
+
+.doc-op strong {
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* --- итоги --- */
+.doc-totals {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--ink);
+}
+
+.doc-total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+}
+
+.doc-total-row span {
+    color: var(--ink-soft);
+    font-size: 14px;
+}
+
+.doc-total-row strong {
+    color: var(--ink);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+}
+
+.doc-total-row--final {
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+
+.doc-total-row--final span {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.doc-total-row--final strong {
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-size: 27px;
+    font-weight: 800;
+}
+
+/* --- подвал --- */
+.doc-foot {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+}
+
+.doc-signs {
+    display: flex;
+    gap: 40px;
+}
+
+.doc-sign {
+    flex: 1;
+    text-align: center;
+}
+
+.doc-sign span {
+    display: block;
+    margin-bottom: 38px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.doc-sign em {
+    display: block;
+    border-bottom: 1px solid var(--ink);
+}
+
+.doc-foot-note {
+    margin-top: 26px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+}
+
+/* --- действия под документом --- */
+.result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 860px;
+    margin: 22px auto 0;
+}

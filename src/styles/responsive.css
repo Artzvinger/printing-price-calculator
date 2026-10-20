@@ -1,0 +1,115 @@
+/* ==========================================================================
+   responsive.css — адаптивность
+   ========================================================================== */
+
+@media (max-width: 860px) {
+    header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .navigation {
+        flex-wrap: wrap;
+    }
+
+    .customer-info,
+    .order-info {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .material-cost {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .doc-grid--3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .doc-head {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .doc-meta {
+        text-align: left;
+    }
+
+    .doc-meta-row {
+        justify-content: flex-start;
+    }
+
+    .doc-ops {
+        grid-template-columns: 1fr;
+    }
+
+    .result-document {
+        padding: 34px 28px;
+    }
+}
+
+@media (max-width: 560px) {
+    .container {
+        padding: 0 14px 48px;
+    }
+
+    header {
+        margin: 0 -14px;
+        padding: 13px 14px;
+    }
+
+    .navigation {
+        gap: 3px;
+    }
+
+    .nav-btn {
+        flex: 1 1 46%;
+        padding: 8px 8px;
+        font-size: 13px;
+    }
+
+    .section {
+        padding: 20px;
+    }
+
+    .customer-info,
+    .order-info,
+    .material-cost {
+        grid-template-columns: 1fr;
+    }
+
+    .operation-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .format-compact > span {
+        min-width: 100%;
+    }
+
+    .doc-grid--3,
+    .doc-grid--2 {
+        grid-template-columns: 1fr;
+    }
+
+    .result-document {
+        padding: 24px 18px;
+    }
+
+    .doc-signs {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .doc-total-row--final strong {
+        font-size: 23px;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .result-actions button {
+        width: 100%;
+    }
+}
